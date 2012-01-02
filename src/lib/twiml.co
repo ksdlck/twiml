@@ -28,7 +28,9 @@ createDSL = (def) ->
       for attr of attrs
         let then x::[attr] = (val) -> @attr attr, val
       dsl[meth] = x
-  dsl.render = (root) -> "" + root
+  dsl.render = (root) -> "#root"
+  dsl.global = ! -> for meth in dsl
+    GLOBAL[meth] = dsl[meth]
   dsl
 
 def = do
@@ -36,7 +38,7 @@ def = do
   say: [\Say, [\voice \language \loop]]
   play: [\Play, [\loop]]
   gather: [\Gather, [\action \method \timeout \finishOnKey \numDigits]]
-  record: [\Record, [\action \method \timeout \finishOnKey \maxLength \transcribe \transcribe \transcribeCallback \playBeep]]
+  record: [\Record, [\action \method \timeout \finishOnKey \maxLength \transcribe \transcribeCallback \playBeep]]
   sms: [\Sms, [\to \from \action \method \statusCallback]]
   dial: [\Dial, [\action \method \timeout \hangupOnStar \timeLimit \callerId]]
   number: [\Number, [\sendDigits \url]]
@@ -47,6 +49,4 @@ def = do
   reject: [\Reject, [\reason]]
   pause: [\Pause, [\length]]
 
-dsl = createDSL def
-module.exports = dsl
-module.exports.global = ! -> GLOBAL <<< dsl
+module.exports = createDSL def

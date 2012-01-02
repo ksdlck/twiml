@@ -1,3 +1,3 @@
 (function(){
-  module.exports = require('./twiml');
+  module.exports = require('./lib/twiml');
 }).call(this);

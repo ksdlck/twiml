@@ -1,0 +1,52 @@
+class element
+  ! ->
+    @body = []
+    @attrs = {}
+    for arg of @@
+      if \object is typeof arg
+        if arg instanceof element or arg instanceof Array then @body = @body.concat arg
+        else @attrs <<< arg
+      else
+        @body.push "#arg"
+  attr: (name, val) -> @attrs[name] = val; @
+  prepend: -> @body.unshift ...@@; @
+  append: -> @body.push ...@@; @
+  insert: (idx, ...args) -> @body.slice idx, 0, ...args; @
+  toString: ->
+    attrs = ("#name=\"#{@attrs[name]}\"" for name in @attrs)
+    "<#{@tag}#{if 0 < attrs.length then " " else ""}#attrs#{if 0 < @body.length then ">#{@body.join ""}</#{@tag}>" else "/>"}"
+
+createDSL = (def) ->
+  dsl = {}
+  for meth in def
+    let
+      [tag, attrs] = def[meth]
+      class x extends element
+        tag: tag
+        ! ~> super ...
+      x.toString = -> "<#tag/>"
+      for attr of attrs
+        let then x::[attr] = (val) -> @attr attr, val
+      dsl[meth] = x
+  dsl.render = (root) -> "" + root
+  dsl
+
+def = do
+  response: [\Response, []]
+  say: [\Say, [\voice \language \loop]]
+  play: [\Play, [\loop]]
+  gather: [\Gather, [\action \method \timeout \finishOnKey \numDigits]]
+  record: [\Record, [\action \method \timeout \finishOnKey \maxLength \transcribe \transcribe \transcribeCallback \playBeep]]
+  sms: [\Sms, [\to \from \action \method \statusCallback]]
+  dial: [\Dial, [\action \method \timeout \hangupOnStar \timeLimit \callerId]]
+  number: [\Number, [\sendDigits \url]]
+  client: [\Client, []]
+  conference: [\Conference, [\muted \beep \startConferenceOnEnter \endConferenceOnExit \waitUrl \waitMethod \maxParticipants]]
+  hangup: [\Hangup, []]
+  redirect: [\Redirect, [\method]]
+  reject: [\Reject, [\reason]]
+  pause: [\Pause, [\length]]
+
+dsl = createDSL def
+module.exports = dsl
+module.exports.global = ! -> GLOBAL <<< dsl

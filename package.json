@@ -1,0 +1,16 @@
+{
+  "author": "Karel Sedláček (http://ksdlck.com)",
+  "name": "twiml",
+  "description": "Javascript TwiML DSL",
+  "version": "0.0.0",
+  "homepage": "https://github.com/ksdlck/twiml",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ksdlck/twiml.git"
+  },
+  "engines": {
+    "node": "~0.6.5"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

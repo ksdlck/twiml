@@ -6,6 +6,12 @@ SYNOPSIS
 
 A nice little DSL for TwiML.  I was unhappy with the existing ones.
 
+FUTURE
+------
+
++ Write a better README.
++ Break the components that generate the XML out into a seperate lib, since they are seperate from the definition and can be used for generating DSLs for other types of XML.
+
 LICENSE
 -------
 Copyright (c) 2011 Karel Sedláček
